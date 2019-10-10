@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <style>
+        input{
+            background-color:#DEDBDB;
+        }
+        #sheet{
+            border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  margin-top: 40px;
+        }
+    </style>    
+    </head>
+    <body>
+        <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                        <a class="navbar-brand" href="#">Sedin</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                          <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                          <div class="navbar-nav">
+                            <a class="nav-item nav-link" href="#">Home </a>
+                            <a class="nav-item nav-link active" href="#">Timesheet<span class="sr-only">(current)</span></a>
+                            <a class="nav-item nav-link" href="#">Attendance</a>
+                          </div>
+                        </div>
+                      </nav>
+                   <div id='sheet'>
+                        <div class="row">
+                                <div class="col-lg-3">
+                
+                                </div>
+                                <div class="col-lg-6">
+                                    <p style="font-family:'Open Sans', sans-serif; font-size: 20px; color:blue;text-align: center; margin-top: 10px"><b><u>Time sheet Entry</u></b></p>
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <label>Date</label><br>
+                                                <input type="date" class='form-control' id="dt" required/><br>
+                                            </div>
+                
+                                            <div class="col-lg-4">
+                                                <label>Project Name</label><br>
+                                            <select  class="custom-select mb-3 form-control" id = "proj">
+                                                    <option value = "1">Development</option>
+                                                    <option value = "2">Testing</option>
+                                                </select>
+                                            </div>
+                                                    
+                                        
+                                        <div class='col-lg-4'>
+                                            <label>Hours</label><br>
+                                            <input type="number" id="hrs" class='form-control' required><br>
+                                        </div>
+                                    </div>
+                                        <div class="row">
+                                            <label>Comments</label><br>
+                                            <textarea class="form-control" rows="5" id="comment"></textarea>
+                                        </div>
+                                        <div class="row"style="margin-top:10px;">
+                                            <div class="col-lg-6">
+                                                <!--<button type="button" class="btn btn-primary">Add new</button>
+                                                -->
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <button type="button" class="btn btn-primary" onclick="userInput()">Submit</button>
+                                        </div>
+                                           
+                                        </div>
+                                        
+                                    </form>
+                                    
+                
+                                </div>
+                                <div class="col-lg-4">
+                
+                                    </div>
+                            </div>
+                            
+                
+                        </div>
+                   </div>   
+            <script>
+                function userInput(){
+                    var placehold = document.getElementById("proj").selectedIndex;
+                    var data = {
+                        date: document.getElementById("dt").value,
+                        project : document.getElementsByTagName("option")[placehold].text,
+
+                        hours:document.getElementById("hrs").value,
+                        comment:document.getElementById("comment").value
+
+                    }
+                    console.log(data);
+
+                    var xhttp = new XMLHttpRequest()
+                    xhttp.onreadystatechange = function(){
+                        if(this.status == 200 && this.readyState == 4)
+                        {
+                            console.log("Success")
+                        }
+                    }
+                    xhttp.open("POST","http://localhost:3000/postTimesheet",true)
+                    xhttp.setRequestHeader("content-type","application/json;charset = UTF-8")
+                    xhttp.send(JSON.stringify(data));
+                    window.location.href = "homepage.html"
+                }
+            </script>
+    </body>
+</html>

@@ -1,0 +1,153 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <style>
+    </style>
+    <body>
+            <div class="container-fluid">
+                    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                            <a class="navbar-brand" href="#">Sedin</a>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                              <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                              <div class="navbar-nav">
+                                <a class="nav-item nav-link" href="#">Home </a>
+                                <a class="nav-item nav-link" href="#">Timesheet</a>
+                                <a class="nav-item nav-link active" href="#">Attendance<span class="sr-only">(current)</span></a>
+                              </div>
+                            </div>
+                          </nav>
+                          <form action="./timesheet.html">
+                                <div class="row" id="input" style="margin-top: 20px;">
+                                        <div class=col-lg-2>
+                        
+                                        </div>
+                                        <div class=col-lg-8>
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                   <!-- <select name="month" id="month" class="custom-select mb-3 form-control">
+                                                        <option selected>This month</option>
+                                                        <option>Today</option>
+                                                        <option>Last week</option>
+                                                        </select>-->
+                                                </div>
+                                            <div class=col-lg-4>
+                                                    <select name="proj" id="proj1" class="custom-select mb-3 form-control">
+                                                            <!--<option selected>All projects</option>-->
+                                                            <option id="1">Development</option>
+                                                            <option id="2">Testing</option>
+                                                                      </select>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <button type="button" class="btn btn-primary" onclick="filter()">Show</button>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                    <button type="button" class="btn btn-primary" onclick="redirect()">Add New</button>
+                                                </div>
+                                        </div>
+                                            </div>
+                                        <div class=col-lg-2>
+                                            
+                                        </div>
+                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-2">
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <table class="table table-bordered" id="tab">
+                                                <thead class="thead-light">
+                                                        <tr>
+                                                            <th>Date</th>
+                                                            <th>Project</th>
+                                                            <th>Hours</th>
+                                                            <th>Comments</th>
+                                                        
+                                                            </tr>
+                                                       
+                                            </table>
+                                        </div>
+                                        <div class="col-lg-2">
+
+                                            </div>
+                                    </div>
+                          </form>
+            
+            </div>
+    </body>
+    <script>
+            
+                    var xhttp = new XMLHttpRequest()
+                    xhttp.onreadystatechange = function(){
+                        if(this.status == 200 && this.readyState == 4)
+                        {
+                            var data=this.responseText
+                            var pdata = JSON.parse(data)
+
+                            pdata.map(inp => {
+                                document.getElementById("tab").innerHTML += 
+                                `<tr><td>` +
+                                    inp.date.slice(0,10)
+                                    +
+                                    `</td><td>` +
+                                    inp.project
+                                    +
+                                    `</td><td>` +
+                                        inp.hours +
+                                        `</td><td>`
+                                            +
+                                            inp.comments +
+                                            `</td></tr>`
+                            })
+                            console.log(data)
+                        }
+                    }
+                    xhttp.open("GET","http://localhost:3000/getTimesheet",true)
+                    xhttp.setRequestHeader("content-type","application/json;charset = UTF-8")
+                    xhttp.send();
+                    
+                    function redirect()
+                    {
+                        window.location.href = "timesheet.html";
+                    }
+
+                    function filter(){
+                        document.getElementById("tab").innerHTML="";
+                        var placehold = document.getElementById("proj1").selectedIndex;
+                        var senddata ={data: document.getElementsByTagName("option")[placehold].text};
+                        console.log(senddata)
+                        var xhttp = new XMLHttpRequest()
+                        xhttp.onreadystatechange = function(){
+                        if(this.status == 200 && this.readyState == 4)
+                        {
+                            var data=this.responseText
+                            var pdata = JSON.parse(data)
+
+                            pdata.map(inp => {
+                                document.getElementById("tab").innerHTML += 
+                                `<tr><td>` +
+                                    inp.date.slice(0,10)
+                                    +
+                                    `</td><td>` +
+                                    inp.project
+                                    +
+                                    `</td><td>` +
+                                        inp.hours +
+                                        `</td><td>`
+                                            +
+                                            inp.comments +
+                                            `</td></tr>`
+                            })
+                        
+                        }
+                    }
+                    xhttp.open("PUT","http://localhost:3000/filter",true)
+                    xhttp.setRequestHeader("content-type","application/json;charset = UTF-8")
+                    xhttp.send(JSON.stringify(senddata));
+
+                    }
+    </script>
+</html>
